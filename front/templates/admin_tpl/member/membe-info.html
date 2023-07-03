@@ -1,0 +1,199 @@
+{% extends "admin_tpl/base.html" %}
+
+{% block head %}
+    <style type="text/css">
+        .tan {
+            display: none
+        }
+
+        .tan div.row {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    </style>
+{% endblock %}
+
+{% block tan %}
+    <div class="tan" id="add-info-tan">
+        <form action="" method="post" class="form form-horizontal"
+              id="form-admin-add" novalidate="novalidate">
+            {% csrf_token %}
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>导入日期：</label>
+                <div class="formControls col-xs-8 col-sm-7">
+                    <input type="text" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" id="info-add_time"
+                           class="input-text Wdate" style="width:150px;">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>导入类型：</label>
+                <div class="formControls col-xs-8 col-sm-7">
+                <span class="select-box" style="width:150px;">
+                    <select style="height: 30px;" id="info-category-select" class="select" name="category-select"
+                            size="1">
+                        {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </span>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>打码用户：</label>
+                <div class="formControls col-xs-8 col-sm-7">
+                    <input type="text" class="input-text" value="" placeholder="" id="info-user" name="valid_bet">
+                </div>
+            </div>
+
+
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>打码金额：</label>
+                <div class="formControls col-xs-8 col-sm-7">
+                    <input type="text" class="input-text" value="" placeholder="" id="info-amount" name="grade_one">
+                </div>
+            </div>
+
+            <div class="row cl">
+                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                    <input id="add-info-submit-btn" class="btn btn-primary radius" type="button"
+                           value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block title_nav %}
+    <span class="c-999 en">&gt;</span>
+    <span class="c-666">打码管理</span>
+    <span class="c-999 en">&gt;</span>
+    <span class="c-666">打码信息</span>
+{% endblock %}
+
+{% block content %}
+    <div class="text-c">
+        选择日期：
+        <input type="text" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" id="ipt_add_time" class="input-text Wdate"
+               style="width:120px;">
+        <input type="text" id="info-user_name" placeholder="会员帐号" style="width:250px" class="input-text">
+        <button id="info-btnQuery" class="btn btn-success" type="submit"><i class="Hui-iconfont"></i> 查询</button>
+    </div>
+
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="l">
+            <a class="btn btn-primary radius" href="{% url 'app_member:import' %}"><i
+                    class="Hui-iconfont"></i> 导入数据</a>
+            <a id="btnExport" class="btn btn-warning radius" href="javascript: void(0);"><i class="Hui-iconfont"></i> 导出数据</a>
+            <a id="membe-info-btnAdd" href="javascript: void(0);" class="btn btn-primary radius"><i
+                    class="Hui-iconfont"></i> 添加打码信息</a>
+        </span>
+        <span class="r">共有数据：<strong id="info-total_count">{{ count }}</strong> 条</span>
+    </div>
+
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-hover table-sort">
+            <thead>
+            <tr class="text-l">
+                <th width="80">编号</th>
+                <th width="80">分类</th>
+                <th width="100">会员帐号</th>
+                <th width="100">打码金额</th>
+                <th width="100">打码日期</th>
+                <th width="100">是否更新</th>
+            </tr>
+            </thead>
+            <tbody id="tbody" class="info-tbody">
+            {% for info in data %}
+                <tr>
+                    <td>{{ info.id }}</td>
+                    <td>{{ info.category.name }}</td>
+                    <td>{{ info.username }}</td>
+                    <td>{{ info.member_amount }}</td>
+                    <td>{{ info.member_date }}</td>
+                    {% if info.is_update %}
+                        <td class="td-status"><span class="label label-success radius">已更新</span></td>
+                    {% else %}
+                        <td class="td-status"><span class="label radius">未更新</span></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <!-- 分页 -->
+        <div class="page-box">
+            <ul id="infos-page-box">
+                {#上一页#}
+                {% if data.has_previous %}
+                    <li><a class="page-btn" href="javascript:void(0);" data-p="{{ data.previous_page_number }}">上一页</a>
+                    </li>
+                {% else %}
+                    <li class="disabled"><a href="javascript:void(0);" data-p="">上一页</a></li>
+                {% endif %}
+
+                {# 是否需要出现三个点 #}
+                {% if left_has_more %}
+                    <li><a class="page-btn" href="javascript:void(0);" data-p="1">1</a></li>
+                    <li class="disabled"><a class="page-btn" href="javascript:void(0);" data-p="">...</a></li>
+                {% endif %}
+
+                {# 左边的页码 #}
+                {% for left_page in left_pages %}
+                    <li><a class="page-btn" href="javascript:void(0);" data-p="{{ left_page }}">{{ left_page }}</a></li>
+                {% endfor %}
+
+                {# 当前的页面 #}
+                <li class="cut"><a class="page-btn" href="javascript:void(0);" data-p="">{{ current_page }}</a></li>
+
+                {# 右边的页码 #}
+                {% for right_page in right_pages %}
+                    <li><a class="page-btn" href="javascript:void(0);" data-p="{{ right_page }}">{{ right_page }}</a>
+                    </li>
+                {% endfor %}
+
+                {# 用来控制右边三个点 #}
+                {% if right_has_more %}
+                    <li class="disabled"><a class="page-btn" href="javascript:void(0);" data-p="">...</a></li>
+                    <li><a class="page-btn" href="javascript:void(0);" data-p="{{ num_pages }}">{{ num_pages }}</a></li>
+                {% endif %}
+
+                {#下一页#}
+                {% if data.has_next %}
+                    <li><a class="page-btn" href="javascript:void(0);" data-p="{{ data.next_page_number }}">下一页</a></li>
+                {% else %}
+                    <li class="disabled"><a class="page-btn" href="javascript:void(0);" data-p="">下一页</a></li>
+                {% endif %}
+            </ul>
+        </div>
+        <!-- 分页 -->
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script id="info-item" type="text/html">
+        {% verbatim %}
+        {{ each data info index }}
+        <tr>
+            <td>{{ info.id }}</td>
+            <td>{{ info.category.name }}</td>
+            <td>{{ info.username }}</td>
+            <td>{{ info.member_amount }}</td>
+            <td>{{ info.member_date }}</td>
+            {{ if info.is_update }}
+            <td class="td-status"><span class="label label-success radius">已更新</span></td>
+            {{ else }}
+            <td class="td-status"><span class="label radius">未更新</span></td>
+            {{ /if }}
+        </tr>
+        {{ /each }}
+        {% endverbatim %}
+    </script>
+    <script type="text/javascript" src="{% static 'js/member.min.js' %}"></script>
+    <script>
+        $(function () {
+            var memberInfo = new MemberInfo();
+            memberInfo.run();
+        });
+    </script>
+
+{% endblock %}

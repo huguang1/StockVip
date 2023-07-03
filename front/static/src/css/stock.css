@@ -1,0 +1,12 @@
+/* 分页 */
+.page-box ul li{ float: left; border: 1px solid #ddd; background-color: #fff; margin-right: 2px;  cursor: pointer;}
+.page-box ul li a {padding: 4px 12px;}
+.page-box ul li.cut {background-color: #5eb95e;}
+.page-box ul li.cut a{color: #fff;}
+.page-box ul li:hover {background-color: #5eb95e; border: 1px solid #5eb95e;}
+.page-box ul li:hover a {color: #fff; text-decoration: none;}
+.page-box ul li.disabled {border: none; cursor: default;}
+.page-box ul li.disabled:hover {background-color: #fff; border: none; cursor: default;}
+.page-box ul li.disabled a {text-decoration: none; color: #333; cursor: default;}
+.page-box ul li.disabled:hover a {text-decoration: none; color: #333; cursor: default;}
+.page-box ul li a{text-decoration: none;}

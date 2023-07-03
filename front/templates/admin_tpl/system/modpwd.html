@@ -1,0 +1,55 @@
+{% extends 'admin_tpl/base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block title_nav %}
+    <span class="c-999 en">&gt;</span>
+    <span class="c-666">修改密码</span>
+{% endblock %}
+
+{% block content %}
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        温馨提示：<font color="#ff0000">【请输入正确的登录密码】</font><br/>
+    </div>
+    <form action="" method="" class="form form-horizontal" id="form-admin-add">
+
+        {% csrf_token %}
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>原始密码：</label>
+            <div class="formControls col-xs-8 col-sm-6">
+                <input type="password" class="input-text" value="" placeholder="" id="old_pass" name="old_pass">
+            </div>
+        </div>
+
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>登录密码：</label>
+            <div class="formControls col-xs-8 col-sm-6">
+                <input type="password" class="input-text" value="" placeholder="" id="password" name="password">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>确认密码：</label>
+            <div class="formControls col-xs-8 col-sm-6">
+                <input type="password" class="input-text" value="" placeholder="" id="password_confirm"
+                       name="password_confirm">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <input id="change-pwd-btn" class="btn btn-primary radius" type="button" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block script %}
+
+    <script type="text/javascript" src="{% static 'js/system.min.js' %}"></script>
+
+{% endblock %}

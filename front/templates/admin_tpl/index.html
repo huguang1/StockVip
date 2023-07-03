@@ -1,0 +1,107 @@
+{% extends 'admin_tpl/base.html' %}
+
+{% block head %} {% endblock %}
+
+{% block title_nav %}
+    <span class="c-999 en">&gt;</span>
+    <span class="c-666">我的桌面</span>
+ {% endblock %}
+
+{% block content %}
+
+    <p class="f-20 text-success">欢迎使用 <font color='#ff0000'>VIP股票系统</font>
+        <span class="f-14">v2.0</span>
+    </p>
+    <p>上次登录IP：{{ last_ip }} 上次登录时间：{{ last_date }} </p>
+    <table class="table table-border table-bordered table-bg">
+        <thead>
+        <tr>
+            <th colspan="7" scope="col">信息统计</th>
+        </tr>
+        <tr class="text-c">
+            <th style="width:50%">统计</th>
+            <th style="width:25%">总数</th>
+            <th style="width:25%">今日</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="text-c">
+            <td>买入交易量【电子游艺】</td>
+            <td></td>
+            <td>0</td>
+        </tr>
+        <tr class="text-c">
+            <td>卖出交易量【电子游艺】</td>
+            <td>223</td>
+            <td>0</td>
+        </tr>
+        <tr class="text-c">
+            <td>兑换彩金【电子游艺】</td>
+            <td>1387.63</td>
+            <td></td>
+        </tr>
+        <tr class="text-c">
+            <td>买入交易量【视讯直播】</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr class="text-c">
+            <td>卖出交易量【视讯直播】</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr class="text-c">
+            <td>兑换彩金【视讯直播】</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table class="table table-border table-bordered table-bg mt-20">
+        <thead>
+        <tr>
+            <th colspan="2" scope="col">服务器信息</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th width="30%">服务器</th>
+            <td>
+                <span id="lbServerName">{{ server }}</span>
+            </td>
+        </tr>
+        <tr>
+            <td>服务器时间</td>
+            <td>{{ date_time }}</td>
+        </tr>
+        <tr>
+            <td>服务器IP地址</td>
+            <td>{{ ip }}</td>
+        </tr>
+        <tr>
+            <td>服务器域名</td>
+            <td>{{ host }}</td>
+        </tr>
+        <tr>
+            <td>服务器端口</td>
+            <td>{{ port }}</td>
+        </tr>
+        <tr>
+            <td>服务器操作系统</td>
+            <td>{{ version }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+
+
+{% endblock %}
+
+{% block footer %}
+        <footer class="footer">
+            <p> Copyright &copy;2018 VIP股票系统 v2.0 All Rights Reserved.<br> 本后台系统由<a href="#"> Xiao Ming </a>提供技术支持</p>
+        </footer>
+    {% endblock %}
+
+{% block script %} {% endblock %}

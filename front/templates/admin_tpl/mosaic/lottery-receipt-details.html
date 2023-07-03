@@ -1,0 +1,270 @@
+{% extends "admin_tpl/base.html" %}
+
+{% block head %}
+    <style>
+        .tab-lrd li {
+            float: left;
+            padding: 8px 15px;
+        }
+
+        .tab-lrd li.cut {
+            background-color: #ffffff;
+            border-bottom: 3px solid #5eb95e;
+
+        }
+        .tab-lrd li:hover {
+            background-color: #ffffff;
+            border-bottom: 3px solid #5eb95e;
+        }
+    </style>
+{% endblock %}
+
+{% block tan %}
+
+{% endblock %}
+
+{% block title_nav %}
+    <span class="c-999 en">&gt;</span>
+    <span class="c-666">会员管理</span>
+    <span class="c-999 en">&gt;</span>
+    <span class="c-666">彩金领取明细</span>
+
+    <input id="refresh30" type="button" value="30秒刷新"/>
+    <input id="refresh60" type="button" value="60秒刷新"/>
+    <input id="refresh-stop" type="button" value="停止刷新"/>
+{% endblock %}
+
+{% block content %}
+    <div class="cl bg-1 bk-gray">
+        <ul class="tab-lrd">
+            {% for categry in categries %}
+                <li data-id="{{ categry.id }}">{{ categry.name }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="text-c mt-10">
+        日期范围：
+        <input type="text" onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'lrd-end_time\')}',dateFmt:'yyyy-MM-dd HH:mm:ss'})"
+               id="lrd-start_time" class="input-text Wdate" style="width:160px;">
+
+        <input type="text"
+               onfocus="WdatePicker({minDate:'#F{$dp.$D(\'lrd-start_time\')}',dateFmt:'yyyy-MM-dd HH:mm:ss'})"
+               id="lrd-end_time" class="input-text Wdate" style="width:160px;">
+        <input type="text" id="lrd-user_name" placeholder="会员帐号" style="width:250px" class="input-text">
+        <button id="lrd-btnQuery" class="btn btn-success" type="submit"><i class="Hui-iconfont"></i> 查询</button>
+    </div>
+
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="l">
+            <a id="lrd-btnExport" class="btn btn-warning radius" href="javascript: void(0);"><i class="Hui-iconfont"></i> 导出数据</a>
+            <a id="lrd-btnSend" href="javascript: void(0);" class="btn btn-primary  radius"><i class="Hui-iconfont"></i> 一键派彩</a>
+            <a id="lrd-btnDel" href="javascript: void(0);" class="btn btn-danger radius"><i class="Hui-iconfont"></i> 删除数据</a>
+        </span>
+        <span class="r">共有数据：<strong id="lrd-total_count">{{ count }}</strong> 条</span>
+    </div>
+
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-hover table-sort">
+            <thead>
+            <tr class="text-l">
+                <th width="80">编号</th>
+                <th width="80">分类</th>
+                <th width="100">会员帐号</th>
+                <th width="120">领取彩金</th>
+                <th width="160">领取时间</th>
+                <th width="80">是否派彩</th>
+                <th width="160">派彩时间</th>
+                <th width="120">操作</th>
+            </tr>
+            </thead>
+            <tbody id="tbody" class="lrd-tbody">
+            {% for lottery_receipt in data %}
+            <tr>
+                <td class="receipt-id" data-receipt-id="{{ lottery_receipt.id }}">{{ lottery_receipt.id }}</td>
+                <td class="receipt-categor">{{ lottery_receipt.category.name }}</td>
+                <td class="receipt-user">{{ lottery_receipt.user.user_name }}</td>
+                <td class="receipt-receive_bonus">{{ lottery_receipt.receive_bonus }}</td>
+                <td class="receipt-pickup_time">{{ lottery_receipt.pickup_time }}</td>
+                {% if lottery_receipt.is_send %}
+                    <td class="td-status" data-is_send="{{ lottery_receipt.is_send }}"><span class="label label-success radius">已派彩</span></td>
+                {% else %}
+                    <td class="td-status" data-is_send="{{ lottery_receipt.is_send }}"><span class="label radius">未派彩</span></td>
+                {% endif %}
+                <td>{{ lottery_receipt.send_time }}</td>
+                <td class="td-manage">
+                    <a class="payout-btn" href="javascript: void(0);"><i class="Hui-iconfont"></i>派彩</a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <!-- 分页 -->
+        <div class="page-box">
+            <ul id="lrd-page-box">
+                {#上一页#}
+                {% if data.has_previous %}
+                    <li><a class="page-btn" href="javascript:void(0);" data-p="{{ data.previous_page_number }}">上一页</a></li>
+                {% else %}
+                    <li class="disabled"><a href="javascript:void(0);" data-p="">上一页</a></li>
+                {% endif %}
+
+                {# 是否需要出现三个点 #}
+                {% if left_has_more %}
+                    <li><a class="page-btn" href="javascript:void(0);" data-p="1">1</a></li>
+                    <li class="disabled"><a href="javascript:void(0);" data-p="">...</a></li>
+                {% endif %}
+
+                {# 左边的页码 #}
+                {% for left_page in left_pages %}
+                    <li><a class="page-btn" href="javascript:void(0);" data-p="{{ left_page }}">{{ left_page }}</a></li>
+                {% endfor %}
+
+                {# 当前的页面 #}
+                <li class="cut"><a class="page-btn" href="javascript:void(0);" data-p="">{{ current_page }}</a></li>
+
+                {# 右边的页码 #}
+                {% for right_page in right_pages %}
+                    <li><a class="page-btn" href="javascript:void(0);" data-p="{{ right_page }}">{{ right_page }}</a></li>
+                {% endfor %}
+
+                {# 用来控制右边三个点 #}
+                {% if right_has_more %}
+                    <li class="disabled"><a href="javascript:void(0);" data-p="">...</a></li>
+                    <li><a class="page-btn" href="javascript:void(0);" data-p="{{ num_pages }}">{{ num_pages }}</a></li>
+                {% endif %}
+
+                {#下一页#}
+                {% if data.has_next %}
+                    <li><a class="page-btn" href="javascript:void(0);" data-p="{{ data.next_page_number }}">下一页</a></li>
+                {% else %}
+                    <li class="disabled"><a href="javascript:void(0);" data-p="">下一页</a></li>
+                {% endif %}
+            </ul>
+        </div>
+        <!-- 分页 -->
+    </div>
+    <audio src="{% static 'bb.mp3' %}" id="refresh-audio" controls="controls" loop="false" hidden="true"></audio>
+
+{% endblock %}
+
+{% block script %}
+
+    <script id="lrd-item" type="text/html">
+        {% verbatim %}
+            {{ each data lottery_receipt index }}
+            <tr>
+                <td class="receipt-id" data-receipt-id="{{ lottery_receipt.id }}">{{ lottery_receipt.id }}</td>
+                <td class="receipt-categor">{{ lottery_receipt.category.name }}</td>
+                <td class="receipt-user">{{ lottery_receipt.user.user_name }}</td>
+                <td class="receipt-receive_bonus">{{ lottery_receipt.receive_bonus }}</td>
+                <td class="receipt-pickup_time">{{ lottery_receipt.pickup_time|timeFormat }}</td>
+                {{ if lottery_receipt.is_send }}
+                    <td class="td-status" data-is_send="{{ lottery_receipt.is_send }}"><span class="label label-success radius">已派彩</span></td>
+                {{ else }}
+                    <td class="td-status" data-is_send="{{ lottery_receipt.is_send }}"><span class="label radius">未派彩</span></td>
+                {{ /if }}
+                <td>{{ lottery_receipt.send_time|timeFormat }}</td>
+                <td class="td-manage">
+                    <a class="payout-btn" href="javascript: void(0);"><i class="Hui-iconfont"></i>派彩</a>
+                </td>
+            </tr>
+            {{ /each }}
+        {% endverbatim %}
+    </script>
+
+    <script src="{% static 'js/mosaic.min.js' %}"></script>
+
+    <script>
+        $(function () {
+            var mosaic_lottery_receipt_details = new MosaicLotteryReceiptDetails();
+            mosaic_lottery_receipt_details.run();
+
+            var refreshAudio = $("#refresh-audio");
+
+            function playAudio() {
+                refreshAudio[0].play();
+                setTimeout(function () {
+                    refreshAudio[0].pause();
+                    refreshAudio[0].load();
+                }, 10000);
+            }
+
+            function refreshWork() {
+                window.location.href = window.location.pathname + "?r=1&u="+ Math.ceil(Math.random()*10000000);
+            }
+
+            function refreshPage(timeNum) {
+                setTimeout(function () {
+                    refreshWork();
+                }, timeNum);
+            }
+
+            //获取url中的参数
+            function getUrlParam(name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+                var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+                if (r != null) return unescape(r[2]);
+                return null; //返回参数值
+            }
+
+            var timeNum = 0;
+            if (sessionStorage.getItem('timeNum')) {
+                timeNum = parseInt(sessionStorage.getItem('timeNum'));
+            } else {
+                sessionStorage.setItem('timeNum', '0');
+                timeNum = 0;
+            }
+
+            function isExist(timeNum) {
+                stockajax.get({
+                    'url':'/mosaic/exist/'+ "?r=1&u="+ Math.ceil(Math.random()*10000000),
+                    'data': {
+                        'up': Math.ceil(Math.random()*1000000)
+                    },
+                    'success': function (result) {
+                        if (result['code']===200) {
+                            var data = result['data']['exist'];
+                            if (data) {
+                                playAudio();
+                                refreshPage(timeNum);
+                            } else {
+                                refreshPage(timeNum);
+                            }
+                        }
+                    }
+                });
+            }
+
+            if (getUrlParam('r')) {
+                if (timeNum === 30000 || timeNum === 60000) {
+                    // playAudio();
+                    // refreshPage(timeNum);
+                    isExist(timeNum);
+                }
+            }
+
+            $("#refresh30").click(function () {
+                sessionStorage.setItem('timeNum', '30000');
+                // playAudio();
+                // refreshPage(30000);
+                isExist(30000);
+            });
+
+            $("#refresh60").click(function () {
+                sessionStorage.setItem('timeNum', '60000');
+                // playAudio();
+                // refreshPage(60000);
+                isExist(60000);
+
+            });
+
+            $("#refresh-stop").click(function () {
+                refreshAudio[0].pause();
+                refreshAudio[0].load();
+                sessionStorage.setItem('timeNum', '0');
+                window.location = window.location.href;
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends "admin_tpl/base.html" %}
+
+{% block head %}{% endblock %}
+{% block title_nav %}
+    <span class="c-999 en">&gt;</span>
+    <span class="c-666">股票管理</span>
+    <span class="c-999 en">&gt;</span>
+    <span class="c-666">股市时间配置</span>
+{% endblock %}
+{% block content %}
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        温馨提示：<font color="#ff0000">【请在活动开始之前，配置好所有数据】</font><br>
+        温馨提示：<font color="#ff0000">【日交易范围，请填写时间格式，例如：19:30:00】</font><br>
+    </div>
+
+    <form action="" method="post" class="form form-horizontal" id="form-admin-add" novalidate="novalidate">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>活动范围：</label>
+            <div class="formControls col-xs-8 col-sm-7">
+                <input type="text"
+                       onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'end_time\')}',dateFmt:'yyyy-MM-dd HH:mm:ss'})"
+                       id="start_time" name="start_time" value="{{ date.start_time|date:"Y-m-d H:i:s" }}" class="input-text Wdate"
+                       style="width:180px;">
+                -
+                <input type="text"
+                       onfocus="WdatePicker({minDate:'#F{$dp.$D(\'start_time\')}',dateFmt:'yyyy-MM-dd HH:mm:ss'})"
+                       id="end_time" name="end_time" value="{{ date.end_time|date:"Y-m-d H:i:s" }}" class="input-text Wdate"
+                       style="width:180px;">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">关闭提示：</label>
+            <div class="formControls col-xs-8 col-sm-7">
+                <textarea name="close_desc" id="close_desc" cols="" rows="" class="textarea"
+                          placeholder="不在活动范围内的提示内容!!">{{ date.close_desc }}</textarea>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>日交易时间范围：</label>
+            <div class="formControls col-xs-8 col-sm-7">
+                <input type="text" id="start1" name="start1" value="{{ date.start_a|date:"H:i:s" }}" class="input-text " style="width:120px;">
+                -
+                <input type="text" id="end1" name="end1" value="{{ date.end_a|date:"H:i:s" }}" class="input-text " style="width:120px;">
+            </div>
+        </div>
+
+{#        <div class="row cl">#}
+{#            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>日交易范围B：</label>#}
+{#            <div class="formControls col-xs-8 col-sm-7">#}
+{#                <input type="text" id="start2" name="start2" value="{{ date.start_b|date:"H:i:s" }}" class="input-text " style="width:120px;">#}
+{#                -#}
+{#                <input type="text" id="end2" name="end2" value="{{ date.end_b|date:"H:i:s" }}" class="input-text " style="width:120px;">#}
+{#            </div>#}
+{#        </div>#}
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>是否维护：</label>
+            <div class="formControls col-xs-8 col-sm-7">
+                <div id="is_weihu" class="switch" data-on="danger" data-off="primary" data-on-label="是" data-off-label="否">
+                    <input type="checkbox" name="is_weihu"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">维护提示：</label>
+            <div class="formControls col-xs-8 col-sm-6">
+                <textarea name="weihu_desc" id="weihu_desc" cols="" rows="" class="textarea"
+                          placeholder="不在活动范围内的提示内容!!">{{ date.maintain_desc }}</textarea>
+            </div>
+        </div>
+
+
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <input id="btn-tf" class="btn btn-primary radius" type="button" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+            </div>
+        </div>
+    </form>
+{% endblock %}
+{% block script %}
+    <script src="{% static 'js/stock.min.js' %}"></script>
+{% endblock %}

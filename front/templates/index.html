@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="cache-control" content="no-cache,no-store, must-revalidate" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
+    <title>澳门巴黎人</title>
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <style>
+        body, html, input {
+            font-family: "微软雅黑";
+        }
+    </style>
+    <link rel="stylesheet" href="{% static 'css/index.min.css' %}"/>
+</head>
+
+<body>
+<div class="tanshow" style="display: none;">
+    <div class="tanbg"></div>
+    <div class="mask_login">
+        {% csrf_token %}
+        <img src="{% static 'images/tan_close.png' %}" class="login_close"/>
+        <h3>登录账户</h3>
+        <div class="userinfo">
+            <img src="{% static 'images/username.png' %}" class="usericon"/>
+            <input type="text" placeholder="账户" class="username" id="username"/>
+        </div>
+        <div class="userinfo">
+            <img src="{% static 'images/login_code.png' %}" class="codeicon"/>
+            <a href="javascript: void(0);" class="yancode">4aewv</a>
+            <input type="text" placeholder="验证码" class="login_code" id="verycode"/>
+        </div>
+        <div id="btnLogin">登录</div>
+        <img src="{% static 'images/logo.png' %}" class="login_logo"/>
+    </div>
+</div>
+
+<div class="top_wrap_one">
+    <div class="top_lead">
+        <ul class="clearfix">
+            <li><a href="http://www.zpjbpujqfwb1jk02gzqjvl9c2dul5qczj3ekab1a9iwjwol660.com/">首页</a>|</li>
+            <li><a href="http://www.a-0tm1e0f1oqacu6h0-ht1yfgyexu3r971d6y-u6eqfswh3tl.com/entrance/page/registeragent">代理合作</a>|
+            </li>
+            <li><a href="https://www.106967.com/">最新优惠</a>|</li>
+            <li><a href="https://307883.com/">备用网址</a></li>
+        </ul>
+        <div class="lead_tel">
+            <img src="{% static 'images/top_hotline_icon.png' %}"/>
+            澳门热线：00853-62526999
+        </div>
+    </div>
+</div>
+
+<div class="top_wrap_two">
+    <div class="top_logo">
+        <img src="{% static 'images/top_logo.png' %}"/>
+        <div class="account_area">
+            <span><a href="/">返回首页</a></span>
+            <span class="username_mark"><a href="javascript: void(0);">登录</a></span>
+            <span><a href="http://8886937.com">官网开户</a></span>
+        </div>
+    </div>
+</div>
+
+<div class="top_banner">
+    <div class="tourist_area">
+        <div class="tourist_area_font">
+            <p>保底投资 坐享超高收益</p>
+            <p>1%-5% 超高增益</p>
+            <a href="javascript: void(0);" class="exchange">
+                立即兑换
+            </a>
+        </div>
+    </div>
+    <div class="userinfo_area taba" style="display: none;">
+        <ul class="tab_hda">
+            {% for category in categories %}
+                <li data-category="{{ category.id }}">{{ category.name }}</li>
+            {% endfor %}
+        </ul>
+        <ul class="tab_bda">
+            <li>
+                <div class="info_card_top">
+                    <table class="info_card_table">
+                        <tr>
+                            <th>官方股价<br/>
+                                <span style="color: #ff2311;font-size: 18px;" id="user_auth_price">0</span>
+                            </th>
+                            <th>
+                                个人股价增益
+                                <br/>
+                                <span style="color: #457502;font-size: 18px;" id="user_person_price">0</span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                总资产
+                                <br/>
+                                <span id="user_total_bet">0</span>
+                            </td>
+                            <td>
+                                剩余资产
+                                <br/>
+                                <span id="user_valid_bet">0</span>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td style="height: 30px">
+                                <span>持股数量:
+                                    <span id="user_hold_shares">0</span>股
+                                </span>
+                            </td>
+                            <td style="height: 30px">
+                                <span>可卖股份:
+                                    <span id="user_free_shares">0</span>股
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="exchange_share">
+                    <!--<span>买入<font id="buy_shares">1</font></span>-->
+                    <span>买入</span>
+                    <input id="buy_shares" type="text" class="share_input_content" value=""/>
+                    <span>已买入:&nbsp;&nbsp;<font id="user_buy_shares"></font>&nbsp;&nbsp;股</span>
+                    <a href="javascript: void(0);" id="btnMaiRu"></a>
+                </div>
+                <div class="exchange_gold_money">
+                    <!--<span>卖出<font id="sell_shares">1</font></span>-->
+                    <span>卖出</span>
+                    <input id="sell_shares" type="text" class="gold_money_input_content" value=""/>
+                    <span>已卖出:&nbsp;&nbsp;<font id="user_sell_shares"></font>&nbsp;&nbsp;股</span>
+                    <a href="javascript: void(0);" id="btnMaiChu"></a>
+                </div>
+                <div class="card_note">可获彩金：
+                    <span id="calc_lottery">0.00</span> 元<img src="{% static 'images/click_get.png' %}"
+                                                              id="receive_gold" class="receive_gold"/>
+                    <div class="card_note_content">
+                        <p>*兑换彩票后请点击</p>
+                        <p>此按钮，获取彩金！</p>
+                    </div>
+                </div>
+                <div class="regist_write" id="loginout">登 出</div>
+                <p class="card_note_bottom">*总资产即有效投注&nbsp;*剩余资产即剩余有效投注&nbsp;*每股10000有效投注</p>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+<div class="tabsall">
+    <div class="tabsallmain">
+        <p style="height: 40px;line-height: 40px;color: #848383;">最新公告：领取股票摇色子&nbsp;每摇中一次可获58元彩金。
+            <img src="{% static 'images/hot.png' %}"/>
+        </p>
+
+        <div class="tab">
+            <ul class="tab_hd">
+                {% for category in categories %}
+                    <li data-category="{{ category.id }}"></li>
+                {% endfor %}
+            </ul>
+            <ul class="tab_bd">
+                <li>
+                    <div class="tab_dz">
+                        <div class="dz_three">
+                            <img src="{% static 'images/dz-img.png' %}" alt="">
+                            <p class="yytip mtp">登录查看资产信息</p>
+                            <a href="javascript: void(0);" class="btn_tanlog"></a>
+                        </div>
+                        <div class="dz_first">
+                            账号：<span id="dz_first-username" style="color:#000;" title="ceshi"></span>
+                            个人股价增益：<span id="dz_first-gain" style="color:#00ff30;" title="">0</span>
+                            昨日股价：<span id="dz_first-yesterday-price" style="color:#00ff30;" title="">0</span>
+                            今日股价：<span id="dz_first-today-price" style="color:#ff0000;" title="">0</span>
+                        </div>
+                        <div class="dz_two">
+                            <div class="dzhalf">
+                                <p>总资产：<span id="dz_first-total_assets" title="">0</span></p>
+                                <p>持股数量：<span id="dz_first-holding_shares" title="">0</span></p>
+
+                                <div class="gnums gnum_first">
+                                    <label>已买入</label>
+                                    <span id="dz_first-buying_shares" title="">0</span>
+                                    <b>股</b>
+                                </div>
+
+                                <div class="gnums">
+                                    <label>可获彩金</label>
+                                    <span id="dz_first-exchange" title="">0</span>
+                                    <b>元</b>
+                                </div>
+                            </div>
+
+                            <div class="dzhalf dzhalf_two">
+                                <p>剩余资产：<span id="dz_first-residual_assets" title="">0</span></p>
+                                <p>可卖股份：<span id="dz_first-can_sold" title="">0</span></p>
+                                <div class="gnums gnum_first">
+                                    <label>已卖出</label>
+                                    <span id="dz_first-selling_shares" title="">0</span>
+                                    <b>股</b>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="yytip dz_tip">*总资产即总有效投注 *剩余资产即剩余有效投注 *每股10000有效投注</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="tab_sx">暂未开放，敬请期待！</div>
+                </li>
+                <li>
+                    <div class="tab_pe">暂未开放，敬请期待！</div>
+                </li>
+                <li>
+                    <div class="tab_cp">暂未开放，敬请期待！</div>
+                </li>
+                <li>
+                    <div class="tab_qp">暂未开放，敬请期待！</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+<div class="main_wrap">
+
+    <div class="banner_navigation">
+        <img src="{% static 'images/navigation_one.png' %}" class="navigation_one_img"/>
+        <img src="{% static 'images/navigation_two.png' %}" class="navigation_two_img"/>
+        <img src="{% static 'images/navigation_three.png' %}" class="navigation_three_img"/>
+        <img src="{% static 'images/navigation_four.png' %}" class="navigation_four_img"/>
+    </div>
+    <div class="navigation_one">
+        <div class="navigation_one_top_font">
+            <p>带你淘金happy之前</p>
+            <p>我们一起谈谈钱</p>
+        </div>
+        <img src="{% static 'images/navigation_one_pic.png' %}"/>
+        <div class="navigation_one_bottom_font">
+            <p>如何收益：股票按照美东时间进行计算，只要前一天电子游艺有效投注达到1万，当日即可兑换</p>
+            <p>1股电子股票，兑换后需隔日才可售出，股价根据官网公布最新股价及个人股价增益进行计算。</p>
+        </div>
+    </div>
+    <div class="navigation_two">
+        <div class="navigation_two_top_font">
+            <p>个人股价增益</p>
+            <p>无限分红&nbsp;&nbsp;收益不限高</p>
+            <p class="navigation_two_top_note">个人股价可根据官网价上涨增益，有效投注越高，涨幅越大；若未达到基准1股，则不享有股价增益；若没有有效投注，则个人
+                股价递减2。</p>
+            <table class="navigation_two_tb">
+                <tr>
+                    <th width="275px">有效投注</th>
+                    <th width="275px">电子游艺涨幅</th>
+                    <th width="443px">计算方式</th>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>-2</td>
+                    <td rowspan="10">彩金=(官网股价+个人股份增益)*个人股份</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>1万</td>
+                    <td>0.1</td>
+                </tr>
+                <tr>
+                    <td>5万</td>
+                    <td>0.5</td>
+                </tr>
+                <tr>
+                    <td>10万</td>
+                    <td>0.8</td>
+                </tr>
+                <tr>
+                    <td>50万</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>100万</td>
+                    <td>1.2</td>
+                </tr>
+                <tr>
+                    <td>500万</td>
+                    <td>1.3</td>
+                </tr>
+                <tr>
+                    <td>1000万</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td>5000万</td>
+                    <td>5</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="navigation_three">
+        <div class="navigation_three_left">
+            <h1>模拟计算</h1>
+            <div class="navigation_three_line"></div>
+            <div class="navigation_three_content">
+                <p>截止昨日拥有股票数量</p>
+                <input type="text" id="total"/><span>例：1000股</span>
+                <p>昨日投注数额</p>
+                <input type="text" id="bet"/><span>例：500000</span>
+                <p>今日官方股价</p>
+                <input type="text" id="price"/><span>例：8元</span>
+                <p>卖出股票数量</p>
+                <span class="note">(提示：不能大于截止昨日拥有股票数量)</span>
+                <input type="text" id="sell"/>
+            </div>
+            <img src="{% static 'images/navigation_three_line.png' %}" style="margin: 0 19px;"/>
+            <div class="navigation_three_content">
+                <p>明日可兑换彩金</p>
+                <input type="text" id="lottery" readonly=""/><span class="unit_yuan">元</span><span class="try_get"
+                                                                                                   id="jisuan">试算</span>
+            </div>
+        </div>
+        <div class="navigation_three_right">
+            <div class="navigation_three_right_strong">
+                <p>我要淘！</p>
+                <p>淘出金山！淘出银山！</p>
+            </div>
+            <p>例1：第一天电子游艺有效投注5万，第二天兑换VIP电子股票5张，第三天即可出售。第二天电子游艺有效投注9000，第三天售出依照基本股价进行计算，官网股价10元，售出可获得10*5=50元彩金。</p>
+            <p>
+                例2：第一天电子游戏有效投注10万，第二天兑换VIP电子股票10张，第二天电子游艺有效投注10万，第三天兑换VIP电子股票10张，累计张数20张第三天电子游艺有效投注50万，第四天售出可获得涨幅增益+1，官网股价15，售出可获得(15+1)*20=320元彩金。</p>
+            <p>例3：第一天电子游艺有效投注8万，第二天兑换VIP电子股票8张，第二天并无投注记录，第三天售出时股价涨幅-2，官网股价10元，售出可获得(10-2)*8=64元彩金</p>
+        </div>
+
+    </div>
+
+    <div class="navigation_four">
+        <div class="navigation_four_note">
+            <p>VIP股票宝典</p>
+            <p>股票宝典，金牌指导，VIP股票交易规则，一网打尽，尽情盈利。</p>
+        </div>
+        <img src="{% static 'images/navigation_four_pic.png' %}"/>
+    </div>
+</div>
+<div class="vip_footer">
+    <img src="{% static 'images/logo.png' %}"/>
+    <p class="footer_vip_num">
+    </p>
+    <p>加入澳门巴黎人VIP股票</p>
+</div>
+<div class="footer_contact">
+    <div class="footer_contact_content">
+        <img src="{% static 'images/contact_Tel.png' %}"/>
+        <img src="{% static 'images/contact_Mail.png' %}"/>
+        <img src="{% static 'images/contact_Wechat_service.png' %}"/>
+        <img src="{% static 'images/contact_online_service.png' %}"/>
+    </div>
+</div>
+<div class="footer_bottom">
+    <p>
+        <a href="javascript: void(0);"><span>关于我们</span>&nbsp;|</a>
+        <a href="javascript: void(0);"><span>联络我们</span>&nbsp;|</a>
+        <a href="javascript: void(0);"><span>合作伙伴</span>&nbsp;|</a>
+        <a href="javascript: void(0);"><span>存款帮助</span>&nbsp;|</a>
+        <a href="javascript: void(0);"><span>取款帮助</span>&nbsp;|</a>
+        <a href="javascript: void(0);"><span>常见问题</span></a>
+    </p>
+    <p>Copyright © The Parisian 澳门巴黎人 Macao Reserved</p>
+</div>
+
+<div class="side_bar" style="display: none;">
+    <div class="slide_bar_left">
+        <a href="javascript: void(0);" class="slide_bar_left_imgOne"></a>
+        <a href="javascript: void(0);" class="slide_bar_left_imgTwo"></a>
+        <a href="javascript: void(0);" class="slide_bar_left_imgThree"></a>
+        <a href="javascript: void(0);" class="slide_bar_left_imgFour"></a>
+        <a href="javascript: void(0);" class="clsoe_left_slide"></a>
+    </div>
+    <div class="slide_bar_right">
+        <img src="{% static 'images/follow_wechat_service.png' %}" class="follow_wechat_service"/>
+        <a href="javascript: void(0);" class="slide_bar_right_imgOne"></a>
+        <img src="{% static 'images/scan_to_download.png' %}" class="scan_to_download"/>
+        <a href="javascript: void(0);" class="slide_bar_right_imgTwo"></a>
+        <a href="https://messenger.providesupport.net/messenger/1rbovfqnolaex1paeu841w9ts6.html" class="slide_bar_right_imgThree"></a>
+        <a href="javascript: void(0);" class="slide_bar_right_imgFour" style="display: none;"></a>
+    </div>
+</div>
+
+<script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/cricleFn.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/scroll.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/layer/2.4/layer.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/stockajax.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.code.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/index.min.js' %}"></script>
+
+<script>
+    $(function () {
+        left_criclefn(70);
+        right_criclefn(70);
+
+        // 生成验证码
+        $('.yancode').createCode({
+            len: 4
+        });
+
+        var navigation_one = $('.navigation_one').offset().top - 80;
+        var navigation_two = $('.navigation_two').offset().top - 80;
+        var navigation_three = $('.navigation_three').offset().top - 80;
+        var navigation_four = $('.navigation_four').offset().top - 80;
+
+        $('.navigation_one_img,.slide_bar_left_imgOne').click(function () {
+            $('html,body').animate({
+                scrollTop: navigation_one
+            }, 500);
+        });
+        $('.navigation_two_img,.slide_bar_left_imgTwo').click(function () {
+            $('html,body').animate({
+                scrollTop: navigation_two
+            }, 500);
+        });
+        $('.navigation_three_img,.slide_bar_left_imgThree').click(function () {
+            $('html,body').animate({
+                scrollTop: navigation_three
+            }, 500);
+        });
+        $('.navigation_four_img,.slide_bar_left_imgFour').click(function () {
+            $('html,body').animate({
+                scrollTop: navigation_four
+            }, 500);
+        });
+
+        $(".slide_bar_left").float({
+            delay: 1000, //延迟
+            position: "lm" //位置
+        });
+        $(".slide_bar_right").float({
+            delay: 1000, //延迟
+            position: "rm" //位置
+        });
+
+        $(".slide_bar_right_imgOne,.slide_bar_right_imgTwo").mouseover(function () {
+            $(this).prev().show();
+        }).mouseout(function () {
+            $(this).prev().hide();
+        });
+
+        $('.slide_bar_right_imgFour').click(function () {
+            $('html,body').animate({
+                scrollTop: 0
+            }, 500);
+        });
+
+        $('.tanbg,.login_close').click(function () {
+            $(this).parents('.tanshow').hide();
+            return false;
+        });
+
+        //  slider 关闭左侧导航
+        $('.clsoe_left_slide').click(function () {
+            $('.slide_bar_left').hide();
+        });
+
+        $('.exchange').click(function () {
+            $('.tanshow').show();
+        });
+
+        function toThousands(num) {
+            var num = (num || 0).toString(),
+                result = '';
+            while (num.length > 3) {
+                result = ',' + num.slice(-3) + result;
+                num = num.slice(0, num.length - 3);
+            }
+            if (num) {
+                result = num + result;
+            }
+            return result;
+        }
+
+        $(window).scroll(function () {
+            var winHeight = $(window).scrollTop();
+            // console.log(winHeight);
+            if (winHeight > 290) {
+                $('.side_bar').fadeIn();
+                if (winHeight > 3186) {
+                    $('.slide_bar_right_imgFour').show();
+                } else {
+                    $('.slide_bar_right_imgFour').hide();
+                }
+            } else {
+                $('.side_bar').fadeOut();
+            }
+        });
+
+        $('.username_mark a').click(function () {
+            $('.tanshow').show();
+        });
+
+        $(".btn_tanlog").click(function () {
+            $('.tanshow').show();
+        });
+
+        function tabs(tabTit, on, tabCon) {
+            $(tabTit).children().eq(0).addClass(on);
+            $(tabCon).children().eq(0).show();
+            $(tabTit).children().click(function () {
+                $(this).addClass(on).siblings().removeClass(on);
+                var index = $(tabTit).children().index(this);
+                $(tabCon).children().eq(index).show().siblings().hide();
+            });
+        }
+        tabs(".tab_hd", "on", ".tab_bd");
+        // tabs(".tab_hda", "on", ".tab_bda");
+    });
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,166 @@
+{% extends "admin_tpl/base.html" %}
+
+{% block head %}
+    <style>
+        .tab-sell li {
+            float: left;
+            padding: 8px 15px;
+        }
+        .tab-sell li.cut {
+            background-color: #ffffff;
+            border-bottom: 3px solid #5eb95e;
+
+        }
+        /*
+        .tab-sell-details li.cut a {
+            color: blue;
+        }*/
+        .tab-sell li:hover {
+            background-color: #ffffff;
+            border-bottom: 3px solid #5eb95e;
+        }
+        /*
+        .tab-sell-details li a {
+            text-decoration: none;
+            padding: 8px 15px;
+        }*/
+    </style>
+{% endblock %}
+
+{% block title_nav %}
+    <span class="c-999 en">&gt;</span>
+    <span class="c-666">会员管理</span>
+    <span class="c-999 en">&gt;</span>
+    <span class="c-666">股票卖出明细</span>
+{% endblock %}
+
+{% block content %}
+    <div class="cl bg-1 bk-gray">
+    <ul class="tab-sell">
+        {% for categry in categries %}
+            <li data-id="{{ categry.id }}">{{ categry.name }}</li>
+        {% endfor %}
+    </ul>
+    </div>
+    <div class="text-c mt-10">
+        选择日期：
+        <input type="text" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" id="sell-add_time" class="input-text Wdate"
+               style="width:120px;">
+        <input type="text" id="sell-user_name" placeholder="会员帐号" style="width:250px" class="input-text">
+        <button id="sell-btnQuery" class="btn btn-success" type="submit"><i class="Hui-iconfont"></i> 查询</button>
+    </div>
+
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="l">
+            <a id="sell-btnDel" href="javascript:void(0);" class="btn btn-danger radius"><i class="Hui-iconfont"></i> 删除数据</a>
+        </span>
+        <span class="r">共有数据：<strong id="sell-total_count">{{ count }}</strong> 条</span>
+    </div>
+
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-hover table-sort">
+            <thead>
+            <tr class="text-l">
+                <th width="80">编号</th>
+                <th width="80">分类</th>
+                <th width="80">会员帐号</th>
+                <th width="80">交易日期</th>
+                <th width="80">卖出股份</th>
+                <th width="80">官网股价</th>
+                <th width="100">个人股份增益</th>
+                <th width="100">获得彩金</th>
+                <th width="160">操作时间</th>
+            </tr>
+            </thead>
+            <tbody id="tbody" class="sell-tbody">
+            {% for sell in data %}
+             <tr>
+                <td>{{ sell.id }}</td>
+                <td>{{ sell.category.name }}</td>
+                <td>{{ sell.user.user_name }}</td>
+                <td>{{ sell.transaction_date }}</td>
+                <td>{{ sell.selling_shares }}</td>
+                <td>{{ sell.official_price }}</td>
+                <td>{{ sell.personal_gain }}</td>
+                <td>{{ sell.earn_prize }}</td>
+                <td>{{ sell.operating_time }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <!-- 分页 -->
+        <div class="page-box">
+            <ul id="sell-page-box">
+                {#上一页#}
+                {% if data.has_previous %}
+                    <li><a class="page-btn" href="javascript:void(0);" data-p="{{ data.previous_page_number }}">上一页</a></li>
+                {% else %}
+                    <li class="disabled"><a href="javascript:void(0);" data-p="">上一页</a></li>
+                {% endif %}
+
+                {# 是否需要出现三个点 #}
+                {% if left_has_more %}
+                    <li><a class="page-btn" href="javascript:void(0);" data-p="1">1</a></li>
+                    <li class="disabled"><a href="javascript:void(0);" data-p="">...</a></li>
+                {% endif %}
+
+                {# 左边的页码 #}
+                {% for left_page in left_pages %}
+                    <li><a class="page-btn" href="javascript:void(0);" data-p="{{ left_page }}">{{ left_page }}</a></li>
+                {% endfor %}
+
+                {# 当前的页面 #}
+                <li class="cut"><a class="page-btn" href="javascript:void(0);" data-p="">{{ current_page }}</a></li>
+
+                {# 右边的页码 #}
+                {% for right_page in right_pages %}
+                    <li><a class="page-btn" href="javascript:void(0);" data-p="{{ right_page }}">{{ right_page }}</a></li>
+                {% endfor %}
+
+                {# 用来控制右边三个点 #}
+                {% if right_has_more %}
+                    <li class="disabled"><a href="javascript:void(0);" data-p="">...</a></li>
+                    <li><a class="page-btn" href="javascript:void(0);" data-p="{{ num_pages }}">{{ num_pages }}</a></li>
+                {% endif %}
+
+                {#下一页#}
+                {% if data.has_next %}
+                    <li><a class="page-btn" href="javascript:void(0);" data-p="{{ data.next_page_number }}">下一页</a></li>
+                {% else %}
+                    <li class="disabled"><a href="javascript:void(0);" data-p="">下一页</a></li>
+                {% endif %}
+            </ul>
+        </div>
+        <!-- 分页 -->
+    </div>
+{% endblock %}
+
+{% block script %}
+
+    <script id="sell-item" type="text/html">
+        {% verbatim %}
+        {{ each data sell index }}
+        <tr>
+            <td>{{ sell.id }}</td>
+            <td>{{ sell.category.name }}</td>
+            <td>{{ sell.user.user_name }}</td>
+            <td>{{ sell.transaction_date|dateFormat }}</td>
+            <td>{{ sell.selling_shares }}</td>
+            <td>{{ sell.official_price }}</td>
+            <td>{{ sell.personal_gain }}</td>
+            <td>{{ sell.earn_prize }}</td>
+            <td>{{ sell.operating_time|timeFormat }}</td>
+        </tr>
+        {{ /each }}
+        {% endverbatim %}
+    </script>
+
+    <script src="{% static 'js/mosaic.min.js' %}"></script>
+    <script>
+        $(function () {
+            var mosaic_sell_details = new MosaicSellDetails();
+            mosaic_sell_details.run();
+        });
+    </script>
+{% endblock %}

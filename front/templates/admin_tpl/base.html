@@ -1,0 +1,286 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="lib/html5.js"></script>
+    <script type="text/javascript" src="lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="{% static 'ui/css/H-ui.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'ui.admin/css/H-ui.admin.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'lib/iconfont/1.0.8/iconfont.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'ui.admin/skin/default/skin.css' %}" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'ui.admin/css/style.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/stock.min.css' %}"/>
+
+    {% block head %}{% endblock %}
+    <title>VIP股票系统-管理中心</title>
+</head>
+<body>
+
+{% block tan %}{% endblock %}
+
+<header class="navbar-wrapper">
+    <div class="navbar navbar-fixed-top">
+        <div class="container-fluid cl">
+            <a class="logo navbar-logo f-l mr-10 hidden-xs" href="{% url 'app_system:index' %}">VIP股票系统</a>
+            <span class="logo navbar-slogan f-l mr-10 hidden-xs">v2.0</span>
+            <a aria-hidden="false" class="nav-toggle Hui-iconfont visible-xs" href="javascript:;">&#xe667;</a>
+            <nav id="Hui-userbar" class="nav navbar-nav navbar-userbar hidden-xs">
+                <ul class="cl">
+                    {% if user %}
+                        {% if user.is_superuser %}
+                            <li>管理员</li>
+                        {% else %}
+                            <li>操作员</li>
+                        {% endif %}
+                    {% endif %}
+
+
+                    <li class="dropDown dropDown_hover">
+                        {% if user %}
+                            <a href="#" class="dropDown_A">{{ user.username }}<i class="Hui-iconfont">&#xe6d5;</i></a>
+                        {% else %}
+                            <a href="#" class="dropDown_A">anyting <i class="Hui-iconfont">&#xe6d5;</i></a>
+                        {% endif %}
+
+                        <ul class="dropDown-menu menu radius box-shadow">
+                            <li><a href="{% url 'app_system:changepwd' %}">修改密码</a></li>
+                            <li><a href="{% url 'app_system:logout' %}">切换账户</a></li>
+                            <li><a href="{% url 'app_system:logout' %}">退出</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</header>
+
+<aside class="Hui-aside">
+    <div class="menu_dropdown bk_2">
+        <dl id="menu-bet">
+            <dt><i class="Hui-iconfont">&#xe616;</i> 打码管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dd>
+                <ul>
+                    <li class="sub-index"><a href="{% url 'app_member:info' %}" title="打码信息">打码信息</a></li>
+                    <li class="sub-import"><a href="{% url 'app_member:import' %}" title="导入数据">导入数据</a></li>
+                    <li class="sub-calc"><a href="{% url 'app_member:update' %}" title="打码更新">打码更新</a></li>
+                </ul>
+            </dd>
+        </dl>
+        <dl id="menu-member">
+            <dt><i class="Hui-iconfont">&#xe60d;</i> 会员管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dd>
+                <ul>
+                    <li class="sub-index"><a href="{% url 'app_mosaic:assets' %}" title="会员资产">会员资产</a></li>
+                    <li class="sub-trade"><a href="{% url 'app_mosaic:bydtl' %}" title="股份买入明细">股份买入明细</a></li>
+                    <li class="sub-lottery"><a href="{% url 'app_mosaic:selldtl' %}" title="股份卖出明细">股份卖出明细</a></li>
+                    <li class="sub-change"><a href="{% url 'app_mosaic:receiptdtl' %}" title="彩金领取明细">彩金领取明细</a></li>
+                </ul>
+            </dd>
+        </dl>
+        <dl id="menu-market">
+            <dt><i class="Hui-iconfont">&#xe620;</i> 股市管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dd>
+                <ul>
+                    <li class="sub-person"><a href="{% url 'app_stock:personal' %}" title="个人股价增益">个人股价增益</a></li>
+                    <li class="sub-auth"><a href="{% url 'app_stock:official' %}" title="官网股价">官网股价</a></li>
+                    <li class="sub-set"><a href="{% url 'app_stock:transaction' %}" title="股市时间配置">股市时间配置</a></li>
+                </ul>
+            </dd>
+        </dl>
+        <dl id="menu-system">
+            <dt><i class="Hui-iconfont">&#xe62e;</i> 系统管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dd>
+                <ul>
+                    {#                    <li class="sub-set" style="display:none;"><a href="#" title="系统设置">系统设置</a></li>#}
+                    <li class="sub-users"><a href="{% url 'app_system:sysuser' %}" title="管理员列表">管理员列表</a></li>
+                    <li class="sub-logs"><a href="{% url 'app_system:syslog' %}" title="系统日志">系统日志</a></li>
+                </ul>
+            </dd>
+        </dl>
+    </div>
+</aside>
+
+<div class="dislpayArrow hidden-xs">
+    <a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a>
+</div>
+
+
+<section class="Hui-article-box">
+    <nav class="breadcrumb"><i class="Hui-iconfont"></i> <a href="{% url 'app_system:index' %}"
+                                                             class="maincolor">首页</a>
+        {% block title_nav %}{% endblock %}
+        <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+           href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a>
+    </nav>
+    <div class="Hui-article">
+        <article class="cl pd-20">
+            {% block content %}{% endblock %}
+
+        </article>
+
+        {% block footer %}{% endblock %}
+    </div>
+</section>
+
+<script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'lib/layer/2.4/layer.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/stockajax.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'ui/js/H-ui.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'ui.admin/js/H-ui.admin.page.js' %}"></script>
+<script type="text/javascript" src="{% static 'lib/My97DatePicker/4.8/WdatePicker.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/arttemplate/template-web.js' %}"></script>
+
+
+<script id="page-item" type="text/html">
+    {% verbatim %}
+    {{ if current_page != 1 }}
+    <li><a class="page-btn" href="javascript:void(0);" data-p="{{ current_page|minusOne }}">上一页</a></li>
+    {{ else }}
+    <li class="disabled"><a href="javascript:void(0);" data-p="">上一页</a></li>
+    {{/if}}
+
+    {{ if left_has_more }}
+    <li><a class="page-btn" href="javascript:void(0);" data-p="1">1</a></li>
+    <li class="disabled"><a href="javascript:void(0);" data-p="">...</a></li>
+    {{ /if }}
+
+
+    {{ each left_pages left_page index }}
+    <li><a class="page-btn" href="javascript:void(0);" data-p="{{ left_page }}">{{ left_page }}</a></li>
+    {{ /each }}
+
+    <li class="cut"><a href="javascript:void(0);" data-p="">{{ current_page }}</a></li>
+
+
+    {{ each right_pages right_page index }}
+    <li><a class="page-btn" href="javascript:void(0);" data-p="{{ right_page }}">{{ right_page }}</a></li>
+    {{ /each }}
+
+    {{ if right_has_more }}
+    <li class="disabled"><a href="javascript:void(0);" data-p="">...</a></li>
+    <li><a class="page-btn" href="javascript:void(0);" data-p="{{ num_pages }}">{{ num_pages }}</a></li>
+    {{ /if }}
+
+    {{ if num_pages != current_page }}
+    <li><a class="page-btn" href="javascript:void(0);" data-p="{{ current_page|plusOne  }}">下一页</a></li>
+    {{ else }}
+    <li class="disabled"><a href="javascript:void(0);" data-p="">下一页</a></li>
+    {{ /if }}
+    {% endverbatim %}
+</script>
+
+<script>
+    /* 菜单状态更新 */
+    $(function () {
+        // 打码管理
+        var menuBet = $("#menu-bet");
+        // 会员管理
+        var menuMember = $("#menu-member");
+        // 股市管理
+        var menuMarket = $("#menu-market");
+        // 系统管理
+        var menuSystem = $("#menu-system");
+        var url = window.location.pathname;
+        var tmp_url = url.split("/");
+        var url_one = tmp_url[1];
+        var url_two = tmp_url[2];
+
+        if (!(url === '/system/index/' || url === '/system/changepwd/')) {
+            if (url_one === 'member') {
+                menuBet.children('dt').addClass('selected');
+                menuBet.children('dd').css({"display": "block"});
+                if (url_two === 'info') {
+                    menuBet.children().find('.sub-index').addClass('current');
+                } else if (url_two === 'import') {
+                    menuBet.children().find('.sub-import').addClass('current');
+                } else if (url_two === 'update') {
+                    menuBet.children().find('.sub-calc').addClass('current');
+                }
+            } else if (url_one === 'mosaic') {
+                menuMember.children('dt').addClass('selected');
+                menuMember.children('dd').css({"display": "block"});
+                if (url_two === 'assets') {
+                    menuMember.children().find('.sub-index').addClass('current');
+                } else if (url_two === 'buydtl') {
+                    menuMember.children().find('.sub-trade').addClass('current');
+                } else if (url_two === 'selldtl') {
+                    menuMember.children().find('.sub-lottery').addClass('current');
+                } else if (url_two === 'receiptdtl') {
+                    menuMember.children().find('.sub-change').addClass('current');
+                }
+            } else if (url_one === 'stock') {
+                menuMarket.children('dt').addClass('selected');
+                menuMarket.children('dd').css({"display": "block"});
+                if (url_two === 'personal') {
+                    menuMarket.children().find('.sub-person').addClass('current');
+                } else if (url_two === 'official') {
+                    menuMarket.children().find('.sub-auth').addClass('current');
+                } else if (url_two === 'transaction') {
+                    menuMarket.children().find('.sub-set').addClass('current');
+                }
+            } else if (url_one === 'system') {
+                menuSystem.children('dt').addClass('selected');
+                menuSystem.children('dd').css({"display": "block"});
+                if (url_two === 'sysuser') {
+                    menuSystem.children().find('.sub-users').addClass('current');
+                } else if (url_two === 'syslog') {
+                    menuSystem.children().find('.sub-logs').addClass('current');
+                }
+            }
+        }
+
+        // 加载了arttemplate才执行下面代码
+        if (window.template) {
+            // 加一过滤器
+            template.defaults.imports.plusOne = function (data_num) {
+                return data_num + 1;
+            };
+            // 减一过滤器
+            template.defaults.imports.minusOne = function (data_num) {
+                return data_num - 1;
+            };
+
+            // 时间日期格式过滤器
+            template.defaults.imports.timeFormat = function (dateValue) {
+                if (dateValue) {
+                    var d = new Date(dateValue);
+                    var year = d.getFullYear();
+                    var month = d.getMonth() + 1;
+                    var day = d.getDate();
+                    var hour = d.getHours();
+                    var minute = d.getMinutes();
+
+                    return year + '年' + month + '月' + day + "日 " + hour + ":" + minute;
+                } else {
+                    return null
+                }
+
+            };
+            // 日期过滤器
+            template.defaults.imports.dateFormat = function (dateValue) {
+                if (dateValue) {
+                    var d = new Date(dateValue);
+                    var day = d.getDate();
+                    var month = d.getMonth() + 1;
+                    var year = d.getFullYear();
+
+                    return year + '年' + month + '月' + day + "日"
+                } else {
+                    return null
+                }
+            };
+        }
+    });
+</script>
+
+{% block script %}{% endblock %}
+</body>
+</html>

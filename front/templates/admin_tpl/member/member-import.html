@@ -1,0 +1,97 @@
+{% extends "admin_tpl/base.html" %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block title_nav %}
+    <span class="c-999 en">&gt;</span>
+    <span class="c-666">打码管理</span>
+    <span class="c-999 en">&gt;</span>
+    <span class="c-666">导入数据</span>
+{% endblock %}
+
+{% block content %}
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        第一步：导入日期<font color="#ff0000">【数据将导入到您选择的日期中】</font><br>
+        第二步：导入类型<font color="#ff0000">【数据将导入到您选择的分类中】</font><br>
+        第三步：上传数据<font color="#ff0000">【必须是excel文件，后缀名为xls或者xlsx】</font><br>
+        第四步：导入到数据库<font color="#ff0000">【将刚才上传的文件，导入到数据库中】</font>
+    </div>
+
+    <form action="" method="post" class="form form-horizontal" id="form-member-add">
+        {% csrf_token %}
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>导入日期：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" id="ipt_add_time"
+                       class="input-text Wdate" style="width:150px;">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>导入类型：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <span class="select-box" style="width:150px;">
+                    <select style="height: 30px;" id="category-select" class="select" name="category-select" size="1">
+                        {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </span>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>选择文件：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <span class="btn-upload form-group">
+                    <input class="input-text upload-url" type="text" name="uploadfile" id="uploadfile" readonly="" style="width:200px">
+                    <a href="javascript:void(0);" class="btn btn-primary radius upload-btn">
+                        <i class="Hui-iconfont"></i> 浏览文件
+                    </a>
+                    <input type="file" id="fileupload" name="mypic" class="input-file">
+                </span>
+            </div>
+        </div>
+
+        <div class="row cl">
+             <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>选择文件：</label>
+             <div class="formControls col-xs-8 col-sm-9">
+                <div class="progress radius">
+                    <div class="progress-bar progress-bar-success">
+                        <span id="sr-only" class="sr-only" style="width:0%"></span>
+                    </div>
+                </div>
+                 <span class="percent">0%</span>
+            </div>
+
+        </div>
+
+        <div class="row cl">
+             <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>上传结果：</label>
+
+            <div class="formControls col-xs-8 col-sm-9">
+                <p id="result" style="color:#ff0000"></p>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <input type="hidden" id="excel_name" name="excel_name" value="">
+                <input id="btn_calc" class="btn btn-success disabled radius" type="button" value="&nbsp;&nbsp;导入到数据库&nbsp;&nbsp;">
+            </div>
+        </div>
+
+    </form>
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript" src="{% static 'js/member.min.js' %}"></script>
+    <script type="text/javascript">
+        $(function () {
+            var member_import = new MemberImport();
+            member_import.run();
+        })
+    </script>
+{% endblock %}
